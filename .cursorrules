@@ -1,0 +1,29 @@
+# Air Quality Monitoring for Schools — Cursor Rules
+
+## Genel Kurallar
+
+- Daima TypeScript kullan. JavaScript dosyası oluşturma.
+- Componentleri Tailwind CSS ile tasarla; tekrar kullanılabilir (modüler) ve temiz bir yapıda tut.
+- Veritabanı işlemleri için sadece Supabase Client kullan (Prisma, Drizzle vb. kullanma).
+- IoT Simülatörü ayrı bir Node.js servisi olarak çalışacak; kodunu Next.js frontend mimarisiyle asla karıştırma.
+
+## İş Akışı Kuralları
+
+- Kod yazmaya başlamadan önce daima `docs/PROGRESS.md` dosyasını kontrol et.
+- Bir görevi tamamladığında `docs/PROGRESS.md` dosyasını otomatik olarak güncelle ve sıradaki göreve geç.
+- Veritabanı tabloları için kendi kendine şema uydurma; `docs/PROJECT_PLAN.md` içindeki veri yapısı kurallarını baz al.
+
+## Proje Yapısı
+
+- `/app` — Next.js App Router sayfaları ve layout'ları
+- `/components` — Tekrar kullanılabilir UI bileşenleri
+- `/lib` — Supabase client, yardımcı fonksiyonlar, tipler
+- `/simulator` — Bağımsız Node.js IoT sensör simülatörü
+- `/docs` — Proje planı ve ilerleme dosyaları
+
+## Kod Standartları
+
+- Her bileşen kendi dosyasında olmalı, barrel export (`index.ts`) kullan.
+- Supabase sorgu tipleri için `Database` generic tipini kullan.
+- `any` tipinden kaçın; her zaman açık tip tanımla.
+- Tüm async işlemlerde hata yönetimi (try/catch veya error boundary) ekle.
