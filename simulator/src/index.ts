@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
 
-// Load env variables
+
 dotenv.config();
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -40,9 +40,7 @@ async function fetchSensors() {
   return sensors || [];
 }
 
-/**
- * REST API HTTP POST
- */
+
 async function sendSensorDataHttpLog(payload: any) {
   try {
     const response = await fetch(`${SUPABASE_URL}/rest/v1/sensor_data`, {
@@ -67,7 +65,7 @@ async function sendSensorDataHttpLog(payload: any) {
   }
 }
 
-// Register or update sensor state
+
 function registerSensor(sensor: any) {
     if (!SENSORS_STATE[sensor.id] && sensor.school_id) {
         console.log(`\n[DYNAMIC EVENT] New Sensor detected and attached to engine: ${sensor.name} (${sensor.type})`);
@@ -115,7 +113,7 @@ async function runSimulator() {
     console.log(`${activeSensors.length} sensor(s) loaded. Engine running...\n`);
   }
 
-  // ============== REALTIME LISTENER ==============
+
   supabase.channel('public:sensors')
     .on(
       'postgres_changes',
@@ -138,7 +136,7 @@ async function runSimulator() {
         }
     });
 
-  // ============== BROADCAST CONTROL CHANNEL ==============
+
   supabase.channel('simulator_control')
     .on(
       'broadcast',
@@ -172,10 +170,10 @@ async function runSimulator() {
         }
     });
 
-  // ============== SIMULATION ENGINE ==============
+
   setInterval(() => {
     
-    // Heartbeat for the web UI to know we are alive
+
     supabase.channel('simulator_control').send({
       type: 'broadcast',
       event: 'HEARTBEAT',
