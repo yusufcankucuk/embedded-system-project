@@ -1,9 +1,0 @@
-# Ignore AI-generated folders and files
-.cursorrules
-memory-bank/
-docs/
-.gemini/
-brain/
-*task.md
-*implementation_plan.md
-*walkthrough.md
