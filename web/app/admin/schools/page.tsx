@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { Building2, Plus, MapPin, Link as LinkIcon } from 'lucide-react';
+import { Building2, Plus, MapPin, Link as LinkIcon, Trash2 } from 'lucide-react';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 
@@ -14,6 +14,30 @@ async function createSchool(formData: FormData) {
 
   await supabase.from('schools').insert([{ name, address }]);
   revalidatePath('/admin/schools');
+}
+
+async function deleteSchool(formData: FormData) {
+  'use server';
+  const schoolId = formData.get('school_id') as string;
+  if (!schoolId) return;
+
+  // 1. Okuldaki tüm sensörlerin (indoor/outdoor) okulla ve sınıfla bağını kopar
+  await supabase.from('sensors').update({ school_id: null, class_id: null }).eq('school_id', schoolId);
+
+  // 2. Bu okula ait tüm geçmiş sensör verilerini sil
+  await supabase.from('sensor_data').delete().eq('school_id', schoolId);
+
+  // 3. Okula bağlı tüm sınıfları sil
+  await supabase.from('classrooms').delete().eq('school_id', schoolId);
+
+  // 4. En son okulu sil
+  const { error } = await supabase.from('schools').delete().eq('id', schoolId);
+  if (error) {
+    console.error("Failed to delete school:", error.message);
+  }
+  
+  revalidatePath('/admin/schools');
+  revalidatePath('/admin');
 }
 
 async function assignSensorToSchool(formData: FormData) {
@@ -102,15 +126,23 @@ export default async function SchoolsAdminPage() {
                 <div className="bg-orange-100 text-orange-600 p-4 rounded-2xl">
                   <Building2 size={24} />
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-black text-slate-800">{school.name}</h3>
-                  {school.address && (
-                    <p className="text-slate-500 text-sm mt-1 flex items-center gap-1">
-                      <MapPin size={14} className="text-orange-400" />
-                      {school.address}
-                    </p>
-                  )}
-                  <div className="mt-2 text-[10px] text-slate-400 font-mono bg-slate-50 border border-slate-200 px-2 py-0.5 rounded inline-block">ID: {school.id}</div>
+                <div className="flex-1 flex justify-between items-start">
+                  <div>
+                    <h3 className="text-xl font-black text-slate-800">{school.name}</h3>
+                    {school.address && (
+                      <p className="text-slate-500 text-sm mt-1 flex items-center gap-1">
+                        <MapPin size={14} className="text-orange-400" />
+                        {school.address}
+                      </p>
+                    )}
+                    <div className="mt-2 text-[10px] text-slate-400 font-mono bg-slate-50 border border-slate-200 px-2 py-0.5 rounded inline-block">ID: {school.id}</div>
+                  </div>
+                  <form action={deleteSchool}>
+                    <input type="hidden" name="school_id" value={school.id} />
+                    <button type="submit" className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors" title="Delete School">
+                      <Trash2 size={18} />
+                    </button>
+                  </form>
                 </div>
               </div>
 

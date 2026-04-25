@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
-import { CloudRain, DoorOpen, Plus, Link as LinkIcon, Home, MapPin, Activity, Flame, ArrowRight } from 'lucide-react';
+import { CloudRain, DoorOpen, Plus, Link as LinkIcon, Home, MapPin, Activity, Flame, ArrowRight, Trash2 } from 'lucide-react';
 
 import OutdoorChart from '@/components/ui/OutdoorChart';
 
@@ -16,6 +16,29 @@ async function createClassroom(formData: FormData) {
 
   await supabase.from('classrooms').insert([{ name, school_id: schoolId }]);
   revalidatePath(`/school/${schoolId}`);
+}
+
+async function deleteClassroom(formData: FormData) {
+  'use server';
+  const classId = formData.get('class_id') as string;
+  const schoolId = formData.get('school_id') as string;
+  
+  if (!classId || !schoolId) return;
+
+  // 1. Sensörlerin bağını kod üzerinden manuel kopar (DB constraint'e güvenmemek için)
+  await supabase.from('sensors').update({ class_id: null }).eq('class_id', classId);
+
+  // 2. Bu sınıfa ait geçmiş sensör verilerini sil (Asıl hatayı verdiren buydu)
+  await supabase.from('sensor_data').delete().eq('class_id', classId);
+
+  // 3. Sınıfı sil
+  const { error } = await supabase.from('classrooms').delete().eq('id', classId);
+  if (error) {
+    console.error("Failed to delete classroom:", error.message);
+  }
+  
+  revalidatePath(`/school/${schoolId}`);
+  revalidatePath('/admin');
 }
 
 async function assignSensorToClass(formData: FormData) {
@@ -256,6 +279,13 @@ export default async function SchoolDashboardPage({
                                 <div className="flex justify-between items-start mb-4">
                                     <h3 className="text-xl font-bold text-slate-800">{cls.name}</h3>
                                     <div className="flex items-center gap-2">
+                                        <form action={deleteClassroom}>
+                                            <input type="hidden" name="class_id" value={cls.id} />
+                                            <input type="hidden" name="school_id" value={schoolId} />
+                                            <button type="submit" className="text-red-400 hover:text-red-600 hover:bg-red-50 p-1.5 rounded-lg transition-colors" title="Delete Classroom">
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </form>
                                         <div className={`w-3 h-3 rounded-full shadow-sm ${DotColor}`} />
                                     </div>
                                 </div>
