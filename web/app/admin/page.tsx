@@ -95,7 +95,7 @@ export default async function AdminDashboardPage() {
                       <p className="font-medium text-slate-700">{sensor.name}</p>
                       <p className="text-xs text-orange-500 font-semibold uppercase tracking-wider">{sensor.type}</p>
                     </div>
-                    <Link href={`/admin/${sensor.type === 'outdoor' ? 'schools' : 'sensors'}`} className="text-sm font-medium text-orange-600 hover:text-white py-2 px-4 hover:bg-orange-600 border border-orange-200 bg-orange-50 rounded-xl transition-colors">
+                    <Link href="/admin/sensors" className="text-sm font-medium text-orange-600 hover:text-white py-2 px-4 hover:bg-orange-600 border border-orange-200 bg-orange-50 rounded-xl transition-colors">
                       Assign
                     </Link>
                   </li>

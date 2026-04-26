@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LayoutDashboard, School, RadioReceiver, ServerIcon } from 'lucide-react';
+import { LayoutDashboard, RadioReceiver, ServerIcon, School } from 'lucide-react';
 
 export default function AdminLayout({
   children,
@@ -21,10 +21,6 @@ export default function AdminLayout({
             <LayoutDashboard className="w-5 h-5 text-orange-500" />
             <span>Dashboard</span>
           </Link>
-          <Link href="/admin/schools" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-orange-50 transition-colors text-slate-700 font-medium hover:text-orange-600">
-            <School className="w-5 h-5 text-orange-500" />
-            <span>Schools</span>
-          </Link>
           <Link href="/admin/sensors" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-orange-50 transition-colors text-slate-700 font-medium hover:text-orange-600">
             <RadioReceiver className="w-5 h-5 text-orange-500" />
             <span>Sensor Management</span>
@@ -35,7 +31,12 @@ export default function AdminLayout({
           </Link>
         </nav>
         
-        <div className="mt-auto p-6 text-xs text-slate-400">
+        <Link href="/school" className="flex items-center gap-3 mx-4 px-4 py-3 mt-auto rounded-xl bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 transition-colors text-emerald-700 font-bold hover:text-emerald-800 shadow-sm">
+            <School className="w-5 h-5 text-emerald-600" />
+            <span>School Dashboard</span>
+          </Link>
+
+        <div className="p-6 text-xs text-slate-400">
           Air Quality Monitoring &copy; 2026
         </div>
       </aside>

@@ -29,7 +29,7 @@ async function createSensor(formData: FormData) {
   await supabase.from('sensors').insert([{ name, type }]);
   revalidatePath('/admin/sensors');
   revalidatePath('/admin');
-  revalidatePath('/admin/schools');
+  revalidatePath('/school');
   redirect('/admin/sensors');
 }
 
@@ -50,7 +50,7 @@ async function manageSensorAction(formData: FormData) {
 
   revalidatePath('/admin/sensors');
   revalidatePath('/admin');
-  revalidatePath('/admin/schools');
+  revalidatePath('/school');
 }
 
 export default async function SensorsAdminPage({
@@ -70,7 +70,7 @@ export default async function SensorsAdminPage({
       <header className="flex justify-between items-end border-b border-orange-100 pb-4">
         <div>
           <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Sensor Fleet</h1>
-          <p className="text-slate-500 mt-2">Create new IoT devices. (To link them, please visit the Schools or Classroom block directly).</p>
+          <p className="text-slate-500 mt-2">Create new IoT devices. (To link them, visit the School Dashboard directly).</p>
         </div>
       </header>
 

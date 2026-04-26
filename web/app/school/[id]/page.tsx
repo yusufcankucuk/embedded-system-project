@@ -57,7 +57,7 @@ async function assignSensorToClass(formData: FormData) {
   revalidatePath(`/school/${schoolId}`);
   revalidatePath('/admin');
   revalidatePath('/admin/sensors');
-  revalidatePath('/admin/schools');
+  revalidatePath('/school');
 }
 
 async function bindOutdoorSensor(formData: FormData) {
@@ -189,8 +189,8 @@ export default async function SchoolDashboardPage({
             
             <div className="flex flex-col justify-between z-10 w-full md:w-1/2 flex-1">
                 <div>
-                    <Link href="/admin/schools" className="inline-flex items-center gap-2 text-sm font-medium text-orange-600 bg-orange-50 px-3 py-1.5 rounded-lg mb-4 hover:bg-orange-100 transition-colors w-max">
-                        <Home size={16} /> Back to Admin
+                    <Link href="/school" className="inline-flex items-center gap-2 text-sm font-medium text-orange-600 bg-orange-50 px-3 py-1.5 rounded-lg mb-4 hover:bg-orange-100 transition-colors w-max">
+                        <Home size={16} /> Back to Schools
                     </Link>
                     <h1 className="text-4xl font-black text-slate-800 tracking-tight">
                         {school.name}
