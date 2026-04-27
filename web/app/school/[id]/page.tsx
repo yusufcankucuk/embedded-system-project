@@ -15,7 +15,7 @@ async function createClassroom(formData: FormData) {
   if (!name || !schoolId) return;
 
   await supabase.from('classrooms').insert([{ name, school_id: schoolId }]);
-  revalidatePath(`/school/${schoolId}`);
+  revalidatePath('/school', 'layout');
 }
 
 async function deleteClassroom(formData: FormData) {
@@ -37,8 +37,8 @@ async function deleteClassroom(formData: FormData) {
     console.error("Failed to delete classroom:", error.message);
   }
   
-  revalidatePath(`/school/${schoolId}`);
-  revalidatePath('/admin');
+  revalidatePath('/school', 'layout');
+  revalidatePath('/admin', 'layout');
 }
 
 async function assignSensorToClass(formData: FormData) {
@@ -54,10 +54,8 @@ async function assignSensorToClass(formData: FormData) {
     .update({ class_id: classId, school_id: schoolId })
     .eq('id', sensorId);
 
-  revalidatePath(`/school/${schoolId}`);
-  revalidatePath('/admin');
-  revalidatePath('/admin/sensors');
-  revalidatePath('/school');
+  revalidatePath('/school', 'layout');
+  revalidatePath('/admin', 'layout');
 }
 
 async function bindOutdoorSensor(formData: FormData) {
@@ -72,8 +70,8 @@ async function bindOutdoorSensor(formData: FormData) {
     .update({ school_id: schoolId })
     .eq('id', sensorId);
 
-  revalidatePath(`/school/${schoolId}`);
-  revalidatePath('/admin/sensors');
+  revalidatePath('/school', 'layout');
+  revalidatePath('/admin', 'layout');
 }
 
 export default async function SchoolDashboardPage({

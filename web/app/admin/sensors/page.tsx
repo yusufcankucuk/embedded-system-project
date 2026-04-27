@@ -27,9 +27,8 @@ async function createSensor(formData: FormData) {
   }
 
   await supabase.from('sensors').insert([{ name, type }]);
-  revalidatePath('/admin/sensors');
-  revalidatePath('/admin');
-  revalidatePath('/school');
+  revalidatePath('/admin', 'layout');
+  revalidatePath('/school', 'layout');
   redirect('/admin/sensors');
 }
 
@@ -48,9 +47,8 @@ async function manageSensorAction(formData: FormData) {
       await supabase.from('sensors').delete().eq('id', id);
   }
 
-  revalidatePath('/admin/sensors');
-  revalidatePath('/admin');
-  revalidatePath('/school');
+  revalidatePath('/admin', 'layout');
+  revalidatePath('/school', 'layout');
 }
 
 export default async function SensorsAdminPage({
